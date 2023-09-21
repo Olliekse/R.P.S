@@ -1,47 +1,67 @@
-// assigns to a variable the game function
-const game = () => {
-  // keeps track of scores
-  let playerScore = 0;
-  let compScore = 0;
+const btnRock = document.querySelector(".btn-rock");
+const btnPaper = document.querySelector(".btn-paper");
+const btnScissors = document.querySelector(".btn-scissors");
+const resultText = document.querySelector(".result__score");
 
-  // the three possible choices the computer has
-  const choices = ["rock", "paper", "scissors"];
+const result = document.querySelector(".result__score-text");
 
-  // creates a loop that runs the game for 5 rounds
-  for (i = 0; i < 5; i++) {
-    // randomly chooses R, P or S for the computer
-    const computerSelection = choices[Math.floor(Math.random() * 3)];
+// keeps track of scores
+let playerScore = 0;
+let compScore = 0;
 
-    // lets the player choose R, P, or S
-    const playerSelection = prompt("Rock, Paper or Scissors?").toLowerCase();
-    // the possible combinations for one round
-    const playRound = () => {
-      if (playerSelection === computerSelection) {
-        return "It's a draw";
-      } else if (
-        playerSelection === "rock" &&
-        computerSelection === "scissors"
-      ) {
-        playerScore++;
-        return `You win! ${playerSelection} beats ${computerSelection}`;
-      } else if (playerSelection === "paper" && computerSelection === "rock") {
-        playerScore++;
-        return `You win! ${playerSelection} beats ${computerSelection}`;
-      } else if (
-        playerSelection === "scissors" &&
-        computerSelection === "paper"
-      ) {
-        playerScore++;
-        return `You win! ${playerSelection} beats ${computerSelection}`;
-      } else {
-        compScore++;
-        return `You lose! ${computerSelection} beats ${playerSelection}`;
-      }
-      // starts a round
-    };
-    console.log(playRound());
-    console.log(`You: ${playerScore}, Computer: ${compScore}`);
+resultText.textContent = `YOU: ${playerScore}
+CPU: ${compScore}`;
+
+const choices = ["rock", "paper", "scissors"];
+
+const playRound = (playerSelection) => {
+  let computerSelection = choices[Math.floor(Math.random() * 3)];
+  if (playerSelection === computerSelection) {
+    result.textContent = `It's a draw`;
+  } else if (playerSelection === "rock" && computerSelection === "scissors") {
+    playerScore++;
+    result.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+  } else if (playerSelection === "paper" && computerSelection === "rock") {
+    playerScore++;
+    result.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+  } else if (playerSelection === "scissors" && computerSelection === "paper") {
+    playerScore++;
+    result.textContent = `You win! ${playerSelection} beats ${computerSelection}`;
+  } else {
+    compScore++;
+    result.textContent = `You lose! ${computerSelection} beats ${playerSelection}`;
   }
 };
-// starts the game
-game();
+
+const disableInput = () => {
+  document.querySelectorAll("button").forEach((button) => {
+    button.disabled = true;
+  });
+};
+
+const showScore = () => {
+  if (playerScore >= 5 && compScore < 5) {
+    disableInput();
+    resultText.textContent = `Game over! You win!`;
+    result.textContent = "";
+  } else if (compScore >= 5 && playerScore < 5) {
+    disableInput();
+    resultText.textContent = `Game over! You lose!`;
+    result.textContent = "";
+  } else {
+    resultText.textContent = `You: ${playerScore}, CPU: ${compScore}`;
+  }
+};
+
+btnRock.addEventListener("click", () => {
+  playRound("rock");
+  showScore();
+});
+btnPaper.addEventListener("click", () => {
+  playRound("paper");
+  showScore();
+});
+btnScissors.addEventListener("click", () => {
+  playRound("scissors");
+  showScore();
+});
